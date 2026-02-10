@@ -37,11 +37,11 @@ fn run_ocr() -> Result<String, Box<dyn std::error::Error>> {
     let full_png_path = work_dir.join(TEMP_PNG_NAME);
 
     std::fs::create_dir_all(work_dir).expect("create dit fail"); // 确保目录存在
-    
+
     let path = full_png_path.to_string_lossy().to_string();
 
     Command::new("rm").args(["-rf", &path]).status()?;
-    
+
     Command::new("flameshot")
         .args(["gui", "--path", &path])
         .status()?;

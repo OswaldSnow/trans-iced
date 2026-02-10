@@ -1,5 +1,5 @@
 use md5;
-use rand::{distributions::Alphanumeric, Rng};
+use rand::{Rng, distributions::Alphanumeric};
 use reqwest::blocking::Client;
 use serde::Deserialize;
 
@@ -25,7 +25,13 @@ pub enum TranslateError {
     EmptyResult,
 }
 
-pub fn translate(q: &str, from: &str, to: &str, appid: String, appkey: String) -> Result<String, TranslateError> {
+pub fn translate(
+    q: &str,
+    from: &str,
+    to: &str,
+    appid: String,
+    appkey: String,
+) -> Result<String, TranslateError> {
     let salt: String = rand::thread_rng()
         .sample_iter(&Alphanumeric)
         .take(16)
@@ -66,5 +72,9 @@ pub fn translate(q: &str, from: &str, to: &str, appid: String, appkey: String) -
         return Err(TranslateError::EmptyResult);
     }
 
-    Ok(items.into_iter().map(|x| x.dst).collect::<Vec<_>>().join("\n"))
+    Ok(items
+        .into_iter()
+        .map(|x| x.dst)
+        .collect::<Vec<_>>()
+        .join("\n"))
 }

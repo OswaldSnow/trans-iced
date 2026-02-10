@@ -11,7 +11,7 @@ pub struct AppState {
     origin_content: text_editor::Content,
     result_content: text_editor::Content,
     appid: String,
-    appkey: String
+    appkey: String,
 }
 
 #[derive(Debug, Clone)]
@@ -28,7 +28,7 @@ impl AppState {
             origin_content: text_editor::Content::with_text(origin_text),
             result_content: text_editor::Content::with_text(""),
             appid,
-            appkey
+            appkey,
         }
     }
 }
@@ -39,7 +39,7 @@ impl Default for AppState {
             origin_content: text_editor::Content::with_text(""),
             result_content: text_editor::Content::with_text(""),
             appid: String::from(""),
-            appkey: String::from("")
+            appkey: String::from(""),
         }
     }
 }
@@ -57,7 +57,14 @@ impl AppState {
                 Task::none()
             }
             Message::Translate => {
-                let res: String = crate::translate_api::translate(&self.origin_content.text(), "en", "zh", self.appid.clone(), self.appkey.clone()).expect("error");
+                let res: String = crate::translate_api::translate(
+                    &self.origin_content.text(),
+                    "en",
+                    "zh",
+                    self.appid.clone(),
+                    self.appkey.clone(),
+                )
+                .expect("error");
                 self.result_content = text_editor::Content::with_text(&res);
                 Task::none()
             }
