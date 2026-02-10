@@ -1,0 +1,12 @@
+[package]
+name = "trans-iced"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+iced="0.14.0"
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "blocking"] }
+serde = { version = "1", features = ["derive"] }
+md5 = "0.7"
+rand = "0.8"
+home = "0.5.12"
