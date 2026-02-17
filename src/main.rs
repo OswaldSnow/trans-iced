@@ -39,9 +39,7 @@ fn parse_args_or_default<I>(args: &mut I) -> String
 where
     I: Iterator<Item = String>,
 {
-    let model = args.next().unwrap_or_default();
-
-    model
+    args.next().unwrap_or_default()
 }
 
 fn usage_and_exit() -> ! {
