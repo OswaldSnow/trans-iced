@@ -6,9 +6,17 @@ const APP_DIR_NAME: &str = ".translate_app";
 const TEMP_PNG_NAME: &str = "shot.png";
 
 fn main() -> iced::Result {
-    let (appid, appkey) = parse_args_or_exit();
+    let mut args = env::args().skip(1);
 
-    let text: String = run_ocr().expect("ocr failed");
+    let (appid, appkey) = parse_args_or_exit(&mut args);
+
+    let model = parse_args_or_default(&mut args);
+
+    let mut text = String::default();
+
+    if !"jw".eq(&model) {
+        text = run_ocr().expect("ocr failed");
+    }
 
     iced::application(
         move || AppState::new(&text, appid.clone(), appkey.clone()),
@@ -18,11 +26,22 @@ fn main() -> iced::Result {
     .run()
 }
 
-fn parse_args_or_exit() -> (String, String) {
-    let mut args = env::args().skip(1); // 跳过程序名
+fn parse_args_or_exit<I>(args: &mut I) -> (String, String)
+where
+    I: Iterator<Item = String>,
+{
     let appid = args.next().unwrap_or_else(|| usage_and_exit());
     let appkey = args.next().unwrap_or_else(|| usage_and_exit());
     (appid, appkey)
+}
+
+fn parse_args_or_default<I>(args: &mut I) -> String
+where
+    I: Iterator<Item = String>,
+{
+    let model = args.next().unwrap_or_default();
+
+    model
 }
 
 fn usage_and_exit() -> ! {
