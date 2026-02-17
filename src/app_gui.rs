@@ -2,9 +2,11 @@ use iced::{
     Alignment, Element,
     Length::{self},
     Task,
-    widget::{button, column, text_editor},
+    widget::{button, column, operation, text_editor},
     window,
 };
+
+const ORIGIN_TEXT_ID: &str = "origin_text";
 
 #[derive(Debug)]
 pub struct AppState {
@@ -23,13 +25,16 @@ pub enum Message {
 }
 
 impl AppState {
-    pub fn new(origin_text: &str, appid: String, appkey: String) -> Self {
-        AppState {
-            origin_content: text_editor::Content::with_text(origin_text),
-            result_content: text_editor::Content::with_text(""),
-            appid,
-            appkey,
-        }
+    pub fn new(origin_text: &str, appid: String, appkey: String) -> (Self, Task<Message>) {
+        (
+            AppState {
+                origin_content: text_editor::Content::with_text(origin_text),
+                result_content: text_editor::Content::with_text(""),
+                appid,
+                appkey,
+            },
+            operation::focus(ORIGIN_TEXT_ID),
+        )
     }
 }
 
@@ -75,6 +80,7 @@ impl AppState {
         column![
             // column![button("Exit").on_press(Message::Exit)].align_x(Alignment::End).width(Length::Fill),
             text_editor(&self.origin_content)
+                .id(ORIGIN_TEXT_ID)
                 .on_action(Message::EditOrigin)
                 .height(300),
             column![button("翻译").on_press(Message::Translate)]
