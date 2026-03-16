@@ -53,7 +53,7 @@ fn run_ocr() -> Result<String, Box<dyn std::error::Error>> {
         .join(APP_DIR_NAME);
     let full_png_path = work_dir.join(TEMP_PNG_NAME);
 
-    std::fs::create_dir_all(work_dir).expect("create dit fail"); // 确保目录存在
+    std::fs::create_dir_all(work_dir).expect("create dit fail"); // make sure dir exists
 
     let path = full_png_path.to_string_lossy().to_string();
 
